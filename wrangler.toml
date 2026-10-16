@@ -8,5 +8,5 @@ directory = ".open-next/assets"
 [[d1_databases]]
 binding = "DB"
 database_name = "try-agrochemical"
-database_id = "replace-with-production-d1-id"
+database_id = "a0868c9c-a6cb-4aa1-9922-729ed0c39bdc"
 migrations_dir = "migrations"
