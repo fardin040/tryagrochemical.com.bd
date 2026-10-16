@@ -1,0 +1,2 @@
+import ApplicationForm from "./ApplicationForm";
+export default function GeneralApplication(){return <main><section><div style={{maxWidth:800,margin:"0 auto"}}><a href="/careers">← Back to Careers</a><div className="feature-card"><h1>General Application</h1><p>Don't see a position that matches your skills? Submit your CV here, and we'll contact you when a suitable role opens up.</p><hr/><ApplicationForm/></div></div></section></main>}

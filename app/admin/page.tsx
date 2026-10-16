@@ -1,0 +1,2 @@
+import AdminProducts from "./AdminProducts";
+export default function Admin(){return <main><section><h2>Administration</h2><p>Manage the product catalog below. Add authentication (Cloudflare Access, or signed session middleware) before exposing this route.</p><AdminProducts/><hr/><p>CRUD API endpoints are available for products. The same D1 tables support pages, jobs, dealers, sales officers, messages, applications, and settings.</p></section></main>}

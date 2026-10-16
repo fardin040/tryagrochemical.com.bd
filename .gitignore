@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+.local
+.DS_Store
+Thumbs.db
+
+# Local tooling and editor files
+.vscode/
+.idea/
+*.log
+vendor/
+node_modules/
+.next/
+.open-next/

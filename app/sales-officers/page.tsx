@@ -1,0 +1,2 @@
+import { listSalesOfficers } from "../../lib/db";
+export default async function SalesOfficers(){const officers=await listSalesOfficers();return <main><section><h2>Sales Officers</h2><p>Contact our field team for local product and agronomy support.</p>{officers.length>0&&<div className="feature-grid">{officers.map((o:any)=><article className="product-card" key={o.id}><h3>{o.name}</h3><p>{o.designation} · {o.area}</p><p>{o.phone}</p></article>)}</div>}</section></main>}

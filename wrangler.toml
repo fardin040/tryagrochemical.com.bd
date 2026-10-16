@@ -1,0 +1,12 @@
+name = "try-agrochemical"
+compatibility_date = "2024-10-22"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = ".open-next/assets"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "try-agrochemical"
+database_id = "replace-with-production-d1-id"
+migrations_dir = "migrations"
