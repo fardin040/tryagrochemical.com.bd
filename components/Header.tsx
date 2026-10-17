@@ -1,10 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import { settings } from "../lib/data";
 
 export default function Header() {
   return <>
     <header className="site-header"><div className="limit-width"><div className="logo-box">
-      <Link href="/"><img src="/images/logo.png" alt={`${settings.siteTitle} Logo`} /></Link>
+      <Link href="/"><Image src="/images/logo.png" alt={`${settings.siteTitle} Logo`} width={60} height={60} /></Link>
       <div><h1>{settings.siteTitle}</h1><p>Quality Agrochemical Solutions for Sustainable Farming</p></div>
     </div></div></header>
     <nav><div className="limit-width"><div className="nav-links">

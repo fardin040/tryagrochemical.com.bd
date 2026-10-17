@@ -18,8 +18,8 @@ If product or job data changes in D1, rebuild and redeploy to refresh the
 prerendered HTML pages. Keep the API routes deployed for form submissions and
 admin operations.
 
-Install and run locally with `npm install && npm run dev`, or build with
-`npm run build`. Deploy through OpenNext using `npm run deploy` after replacing
+Install and run locally with `npm install && npm run dev`, lint with
+`npm run lint`, or build with `npm run build`. Deploy through OpenNext using `npm run deploy` after replacing
 `database_id` in `wrangler.toml` and authenticating Wrangler. Apply
 `migrations/0001_initial.sql` to the D1 database with
 `npx wrangler d1 migrations apply try-agrochemical --remote`.

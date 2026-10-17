@@ -6,11 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "deploy": "opennextjs-cloudflare build && wrangler deploy"
   },
   "dependencies": {
-    "next": "^15.5.28",
+    "next": "^16.4.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -20,6 +20,8 @@
     "@types/node": "^20.17.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "eslint": "^10.13.0",
+    "eslint-config-next": "^16.4.2",
     "typescript": "^5.6.3",
     "wrangler": "^4.151.1"
   }
