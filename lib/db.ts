@@ -16,7 +16,8 @@ export async function getDb(): Promise<D1Database | undefined> {
 export async function listProducts(db?: D1Database): Promise<DbProduct[]> {
   const database = db ?? await getDb();
   if (!database) return fallbackProducts.map(p => ({ id: p.id, name: p.name, category: p.category, image: p.image ?? null, description: p.description ?? null }));
-  return (await database.prepare("SELECT id,name,category,image,description FROM products ORDER BY created_at DESC").all<DbProduct>()).results;
+  const results = (await database.prepare("SELECT id,name,category,image,description FROM products ORDER BY created_at DESC").all<DbProduct>()).results;
+  return results.length > 0 ? results : fallbackProducts.map(p => ({ id: p.id, name: p.name, category: p.category, image: p.image ?? null, description: p.description ?? null }));
 }
 export async function getPage(slug: string, db?: D1Database): Promise<DbPage | undefined> {
   const database = db ?? await getDb();
