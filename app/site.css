@@ -734,6 +734,18 @@ p {
     gap: 5px;
 }
 
+.admin-media-upload {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-light);
+    font-size: .8rem;
+}
+
+.admin-media-upload input[type="file"] {
+    flex: 1;
+}
+
 .admin-form label:nth-last-of-type(1),
 .admin-form button {
     grid-column: 1 / -1;
