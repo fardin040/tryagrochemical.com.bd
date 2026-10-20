@@ -29,7 +29,7 @@ function unauthorized() {
 export async function GET(request: Request) {
   if (!await isAdminRequest(request)) return unauthorized();
   const table = tableOf(request);
-  const db = getDb();
+  const db = await getDb();
   if (!table) return NextResponse.json({ error: "Invalid table" }, { status: 400 });
   if (!db) return NextResponse.json({ error: "D1 binding is not configured" }, { status: 503 });
   const rows = (await db.prepare(`SELECT * FROM ${table} ORDER BY id DESC LIMIT 200`).all<Record<string, unknown>>()).results;
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   if (!await isAdminRequest(request)) return unauthorized();
   const table = tableOf(request);
-  const db = getDb();
+  const db = await getDb();
   if (!table) return NextResponse.json({ error: "Invalid table" }, { status: 400 });
   if (!db) return NextResponse.json({ error: "D1 binding is not configured" }, { status: 503 });
   const body = await request.json() as Record<string, unknown>;
@@ -55,7 +55,7 @@ export async function DELETE(request: Request) {
   if (!await isAdminRequest(request)) return unauthorized();
   const table = tableOf(request);
   const id = new URL(request.url).searchParams.get("id");
-  const db = getDb();
+  const db = await getDb();
   if (!table || !id || !/^\d+$/.test(id)) return NextResponse.json({ error: "Valid table and id are required" }, { status: 400 });
   if (!db) return NextResponse.json({ error: "D1 binding is not configured" }, { status: 503 });
   await db.prepare(`DELETE FROM ${table} WHERE id = ?`).bind(Number(id)).run();
@@ -65,7 +65,7 @@ export async function DELETE(request: Request) {
 export async function PATCH(request: Request) {
   if (!await isAdminRequest(request)) return unauthorized();
   const table = tableOf(request);
-  const db = getDb();
+  const db = await getDb();
   const body = await request.json() as Record<string, unknown> & { id?: number };
   if (!table || !body.id) return NextResponse.json({ error: "Valid table and id are required" }, { status: 400 });
   if (!db) return NextResponse.json({ error: "D1 binding is not configured" }, { status: 503 });
