@@ -445,6 +445,27 @@ p {
     min-width: 0;
 }
 
+.admin-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.admin-toolbar input {
+    flex: 1;
+}
+
+.admin-upload {
+    cursor: pointer;
+    display: grid;
+    gap: 5px;
+    font-size: .9rem;
+}
+
+.admin-upload input {
+    width: 100%;
+}
+
 .admin-form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

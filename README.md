@@ -40,6 +40,19 @@ wire the Wrangler `DB` binding into the adapter/runtime global (or replace
 File CV uploads intentionally are not written to local disk: use R2 and store
 the object key in `job_applications.resume` for production.
 
+### Media storage
+
+The admin panel supports image uploads through the `MEDIA` R2 binding. Enable
+R2 for the Cloudflare account, create the bucket, and deploy:
+
+```bash
+npx wrangler r2 bucket create try-agrochemical-media
+npm run deploy
+```
+
+Uploads are limited to images up to 5 MB and are served through the protected
+application media route.
+
 ### Admin API token
 
 Set a strong `ADMIN_API_TOKEN` secret in the deployment environment (for
