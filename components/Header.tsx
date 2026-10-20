@@ -14,6 +14,7 @@ export default function Header() {
         <Link href="/dealers">Dealer List</Link><Link href="/sales-officers">Sales Officers</Link>
       </div></div>
       <Link href="/careers">Careers</Link><Link href="/contact">Contact</Link>
+      <Link className="nav-login-link" href="/login">Admin / Dealer Login</Link>
     </div></div></nav>
   </>;
 }

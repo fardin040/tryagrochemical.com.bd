@@ -164,6 +164,22 @@ nav a.active {
     background: rgba(255, 255, 255, 0.15);
 }
 
+.nav-login-link {
+    margin: 7px 8px;
+    padding: 8px 14px;
+    border: 1px solid rgba(255, 255, 255, .75);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .12);
+    font-size: .78rem;
+    letter-spacing: .35px;
+    line-height: 1.4;
+}
+
+.nav-login-link:hover {
+    background: var(--white);
+    color: var(--primary-dark);
+}
+
 /* Dropdown Styles */
 .dropdown {
     position: relative;
@@ -1674,6 +1690,16 @@ footer {
         color: var(--primary);
         padding-left: 10px;
         /* Slide effect on hover */
+    }
+
+    .nav-links .nav-login-link {
+        width: auto;
+        margin: 8px 0;
+        padding: 10px 16px;
+        border-color: var(--primary);
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        text-align: center;
     }
 
     /* Branding inside Menu */
