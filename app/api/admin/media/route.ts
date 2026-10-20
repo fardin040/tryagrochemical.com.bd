@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { isAdminRequest } from "../../../../lib/admin-auth";
 
 type MediaBucket = { put(key: string, value: ArrayBuffer, options?: { httpMetadata?: { contentType?: string } }): Promise<unknown> };
 
 export async function POST(request: Request) {
   if (!await isAdminRequest(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const bucket = (globalThis as typeof globalThis & { MEDIA?: MediaBucket }).MEDIA;
+  const { env } = await getCloudflareContext({ async: true });
+  const bucket = (env as { MEDIA?: MediaBucket }).MEDIA;
   if (!bucket) return NextResponse.json({ error: "R2 MEDIA binding is not configured" }, { status: 503 });
   const form = await request.formData();
   const file = form.get("file");

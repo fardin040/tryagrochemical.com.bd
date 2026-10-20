@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 type MediaBucket = { get(key: string): Promise<{ body: ReadableStream; httpMetadata?: { contentType?: string } } | null> };
 
 export async function GET(request: Request, { params }: { params: Promise<{ key: string[] }> }) {
-  const bucket = (globalThis as typeof globalThis & { MEDIA?: MediaBucket }).MEDIA;
+  const { env } = await getCloudflareContext({ async: true });
+  const bucket = (env as { MEDIA?: MediaBucket }).MEDIA;
   if (!bucket) return NextResponse.json({ error: "Media storage is not configured" }, { status: 503 });
   const object = await bucket.get((await params).key.join("/"));
   if (!object) return new NextResponse(null, { status: 404 });
