@@ -600,6 +600,55 @@ p {
     margin: 0 0 20px;
 }
 
+.admin-refresh {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 20px;
+    padding: 8px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--primary-dark);
+    cursor: pointer;
+    font: inherit;
+    font-size: .85rem;
+    font-weight: 700;
+    transition: border-color .2s, background .2s, box-shadow .2s, opacity .2s;
+}
+
+.admin-refresh:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    box-shadow: 0 2px 8px rgba(31, 126, 68, .1);
+}
+
+.admin-refresh:focus-visible {
+    outline: 3px solid rgba(31, 126, 68, .18);
+    outline-offset: 2px;
+}
+
+.admin-refresh:disabled {
+    cursor: wait;
+    opacity: .72;
+}
+
+.admin-refresh-icon {
+    display: inline-block;
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.admin-refresh[aria-busy="true"] .admin-refresh-icon {
+    animation: admin-refresh-spin .8s linear infinite;
+}
+
+@keyframes admin-refresh-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .admin-toolbar span,
 .admin-record-header span {
     color: var(--text-light);
