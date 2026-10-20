@@ -1733,7 +1733,7 @@ section h2 {
 ========================= */
 :root {
     --admin-sidebar-width: 260px;
-    --admin-sidebar-bg: #1e293b;
+    --admin-sidebar-bg: #222b3c;
     --admin-sidebar-text: #94a3b8;
     --admin-sidebar-active: #ffffff;
     --admin-sidebar-hover: #334155;
