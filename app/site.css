@@ -17,6 +17,30 @@
     --radius: 8px;
 }
 
+.auth-card,.checkout-card { max-width: 620px; margin: 50px auto; background: var(--white); padding: 32px; border-radius: var(--radius); box-shadow: var(--shadow); }
+.auth-card h2 { margin-bottom: 8px; }
+.auth-tabs { display:flex; gap:8px; border-bottom:1px solid var(--border); margin:24px 0; }
+.auth-tabs button { border:0; background:none; padding:10px 14px; cursor:pointer; color:var(--text-light); }
+.auth-tabs button.active { color:var(--primary-dark); border-bottom:3px solid var(--primary); font-weight:700; }
+.stack-form { display:grid; gap:14px; }
+.stack-form label { display:grid; gap:5px; font-weight:600; color:var(--text); }
+.stack-form input,.stack-form textarea,.stack-form select { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:5px; font:inherit; }
+.stack-form textarea { min-height:75px; }
+.form-message { padding:10px 12px; background:var(--primary-light); border-radius:5px; color:var(--primary-dark); margin-top:14px; }
+.portal-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:20px; margin-bottom:28px; }
+.portal-actions { margin-bottom:28px; }
+.order-list { display:grid; gap:12px; margin-top:16px; }
+.order-card { display:grid; grid-template-columns:1fr auto; gap:4px 15px; padding:18px; border:1px solid var(--border); border-radius:var(--radius); background:var(--white); }
+.order-card span { color:var(--primary-dark); font-weight:600; text-transform:capitalize; }
+.order-card p,.order-card small { grid-column:1/-1; margin:0; }
+.modal-backdrop { position:fixed; inset:0; z-index:2000; background:rgba(0,0,0,.55); display:grid; place-items:center; padding:20px; }
+.checkout-card { position:relative; width:100%; margin:0; max-height:90vh; overflow:auto; }
+.modal-close { position:absolute; right:15px; top:10px; border:0; background:none; font-size:28px; cursor:pointer; }
+.cart-items { display:grid; gap:8px; margin:16px 0; }
+.cart-item { display:grid; grid-template-columns:1fr 70px auto; align-items:center; gap:8px; padding:8px; border:1px solid var(--border); border-radius:5px; }
+.cart-item input { padding:6px; border:1px solid var(--border); border-radius:4px; }
+.cart-item button { border:0; background:none; color:var(--accent); cursor:pointer; }
+
 * {
     box-sizing: border-box;
     margin: 0;

@@ -10,6 +10,8 @@ const sections = [
   ["categories", "Categories", ["name", "slug"], "Catalog"],
   ["jobs", "Jobs", ["title", "location", "type", "description", "deadline"], "Careers"],
   ["job_applications", "Applications", ["job_id", "applicant_name", "email", "phone", "cover_letter", "resume", "status", "is_general"], "Careers"],
+  ["dealer_applications", "Dealer applications", ["business_name", "contact_person", "email", "phone", "address", "district", "upazila", "license", "status"], "Network"],
+  ["dealer_orders", "Dealer orders", ["dealer_id", "items", "subtotal", "delivery_address", "district", "upazila", "notes", "payment_method", "payment_status", "status"], "Network"],
   ["messages", "Messages", ["name", "phone", "message"], "Communication"],
   ["dealers", "Dealers", ["name", "organization", "address", "district", "phone"], "Network"],
   ["sales_officers", "Sales officers", ["name", "designation", "area", "phone", "image"], "Network"],

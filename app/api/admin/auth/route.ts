@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Admin credentials are not configured" }, { status: 503 });
   }
   const body = await request.json() as { username?: string; password?: string };
-  if (body.username !== process.env.ADMIN_USERNAME || body.password !== process.env.ADMIN_PASSWORD) {
+  if ((body.username ?? (body as { email?: string }).email) !== process.env.ADMIN_USERNAME || body.password !== process.env.ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Invalid username or password" }, { status: 401 });
   }
   const response = NextResponse.json({ authenticated: true });

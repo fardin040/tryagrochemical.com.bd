@@ -21,7 +21,7 @@ admin operations.
 Install and run locally with `npm install && npm run dev`, lint with
 `npm run lint`, or build with `npm run build`. Deploy through OpenNext using `npm run deploy` after replacing
 `database_id` in `wrangler.toml` and authenticating Wrangler. Apply
-`migrations/0001_initial.sql` to the D1 database with
+the migrations to the D1 database with
 `npx wrangler d1 migrations apply try-agrochemical --remote`.
 
 The migration includes the original data entities (products, pages, settings,
@@ -66,7 +66,7 @@ Missing configuration returns `503`; an absent or incorrect header returns
 
 The `/admin` route provides a protected control panel for settings, pages,
 products, categories, jobs, applications, messages, dealers, sales officers,
-and certifications. Configure `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and
+certifications, dealer applications, and dealer orders. Configure `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and
 `ADMIN_SESSION_SECRET` as Cloudflare secrets before signing in. Also protect
 `/admin` and `/api/admin/*` with Cloudflare Access; the application session is
 the second protection layer.
@@ -82,6 +82,27 @@ npx wrangler secret put ADMIN_SESSION_SECRET
 Use a long random value for `ADMIN_SESSION_SECRET`. In Cloudflare Zero Trust,
 create an Access application for the Worker hostname and restrict both
 `/admin` and `/api/admin/*` to your administrator email or identity group.
+
+### Dealer ordering
+
+`/login` is the combined administrator/dealer entry point. Dealers submit an
+application there; only an administrator can approve it from **Dealer
+applications** in `/admin`. Approved dealers sign in to `/dealer-portal` and
+can submit orders from the product catalog with delivery address, district,
+Upazila, notes, and cash-on-delivery. An unavailable SSLCommerz option is
+shown explicitly but cannot be selected successfully. Cash on delivery works
+without payment credentials. SSLCommerz is deliberately gated: set
+`SSLCOMMERZ_STORE_ID`, `SSLCOMMERZ_STORE_PASSWORD`, and (optionally)
+`SSLCOMMERZ_SANDBOX` are reserved for a future integration. Online payment is
+currently rejected explicitly; no order is created and no payment is reported
+as successful. Use cash on delivery until the SSLCommerz initiation, callback,
+and validation flow is added. Apply the new `0002_dealer_orders.sql` and
+`0003_dealer_accounts.sql` migrations before using dealer features.
+Applications remain review records; changing an
+application’s status to `approved` through the admin API creates or reactivates
+the separate `dealer_accounts` record using its stored password hash.
+Pending/rejected applications never authenticate, and rejected applications
+disable any previously created account.
 
 ## Requirements
 
