@@ -17,7 +17,3 @@ binding = "DB"
 database_name = "try-agrochemical"
 database_id = "a0868c9c-a6cb-4aa1-9922-729ed0c39bdc"
 migrations_dir = "migrations"
-
-[[r2_buckets]]
-binding = "MEDIA"
-bucket_name = "try-agrochemical-media"
