@@ -2071,3 +2071,32 @@ section h2 {
     font-size: 0.75rem;
     opacity: 0.8;
 }
+
+/* Keep the dashboard grid independent from the legacy fixed-admin styles. */
+.admin-shell {
+    grid-template-columns: 250px minmax(0, 1fr);
+}
+
+.admin-shell .admin-sidebar {
+    position: static;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    transform: none;
+}
+
+.admin-shell .admin-main {
+    margin-left: 0;
+    padding: 0;
+    min-width: 0;
+}
+
+@media (max-width: 760px) {
+    .admin-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-shell .admin-sidebar {
+        display: grid;
+    }
+}
