@@ -404,6 +404,97 @@ p {
     object-fit: cover;
 }
 
+.admin-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.admin-sidebar {
+    display: grid;
+    gap: 8px;
+    background: var(--surface, #fff);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.admin-sidebar h2 {
+    font-size: 1.2rem;
+    margin: 0 0 10px;
+}
+
+.admin-sidebar button {
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    padding: 10px;
+    text-align: left;
+}
+
+.admin-sidebar button:hover,
+.admin-sidebar button.active {
+    background: var(--primary);
+    color: #fff;
+}
+
+.admin-content {
+    min-width: 0;
+}
+
+.admin-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.admin-form label {
+    display: grid;
+    gap: 5px;
+}
+
+.admin-form label:nth-last-of-type(1),
+.admin-form button {
+    grid-column: 1 / -1;
+}
+
+.admin-table {
+    display: grid;
+    gap: 12px;
+}
+
+.admin-table article {
+    background: var(--surface, #fff);
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.admin-table article p {
+    margin: 6px 0;
+    overflow-wrap: anywhere;
+}
+
+.admin-table article button {
+    margin-top: 8px;
+}
+
+@media (max-width: 760px) {
+    .admin-layout,
+    .admin-form {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-form label:nth-last-of-type(1),
+    .admin-form button {
+        grid-column: auto;
+    }
+}
+
 .product-category {
     font-size: 0.75rem;
     color: var(--text-light);

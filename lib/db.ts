@@ -1,4 +1,4 @@
-import { products as fallbackProducts, pages as fallbackPages, jobs as fallbackJobs } from "./data";
+import { certifications as fallbackCertifications, products as fallbackProducts, pages as fallbackPages, settings as fallbackSettings, jobs as fallbackJobs } from "./data";
 
 export interface D1Database {
   prepare(query: string): { all<T>(): Promise<{ results: T[] }>; first<T>(): Promise<T | null>; run(): Promise<unknown>; bind(...values: unknown[]): { all<T>(): Promise<{ results: T[] }>; first<T>(): Promise<T | null>; run(): Promise<unknown> } };
@@ -6,6 +6,7 @@ export interface D1Database {
 export type DbProduct = { id: number; name: string; category: string | null; image: string | null; description: string | null };
 export type DbPage = { id: number; slug: string; title: string; content: string; meta_description: string | null };
 export type DbJob = { id: number; title: string; location: string; type: string; description: string; deadline: string };
+export type DbCertification = { id: number; title: string; description: string | null; icon: string | null };
 
 export function getDb(): D1Database | undefined {
   return (globalThis as typeof globalThis & { DB?: D1Database }).DB;
@@ -17,6 +18,18 @@ export async function listProducts(db = getDb()): Promise<DbProduct[]> {
 export async function getPage(slug: string, db = getDb()): Promise<DbPage | undefined> {
   if (!db) { const p = fallbackPages[slug]; return p ? { id: 0, slug, title: p.title, content: p.content, meta_description: p.metaDescription } : undefined; }
   return (await db.prepare("SELECT id,slug,title,content,meta_description FROM pages WHERE slug = ?").bind(slug).first<DbPage>()) ?? undefined;
+}
+export async function getSettings(db = getDb()) {
+  if (!db) return fallbackSettings;
+  const rows = (await db.prepare("SELECT setting_key,setting_value FROM settings").all<{ setting_key: string; setting_value: string | null }>()).results;
+  return rows.reduce<Record<string, string>>((result, row) => {
+    result[row.setting_key] = row.setting_value ?? "";
+    return result;
+  }, {});
+}
+export async function listCertifications(db = getDb()): Promise<DbCertification[]> {
+  if (!db) return fallbackCertifications.map((item, id) => ({ id, title: item.title, description: item.description, icon: item.icon }));
+  return (await db.prepare("SELECT id,title,description,icon FROM certifications ORDER BY id").all<DbCertification>()).results;
 }
 export async function listJobs(db = getDb()): Promise<DbJob[]> {
   if (!db) return fallbackJobs;

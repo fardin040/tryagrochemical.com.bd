@@ -1,2 +1,3 @@
-import { pages } from "../../lib/data";
-export default function About(){return <main><section dangerouslySetInnerHTML={{__html: pages.about.content}} /></main>}
+import { getPage } from "../../lib/db";
+export const dynamic = "force-dynamic";
+export default async function About(){const page = await getPage("about"); return <main><section dangerouslySetInnerHTML={{__html: page?.content ?? ""}} /></main>}

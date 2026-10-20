@@ -49,6 +49,27 @@ example, `npx wrangler secret put ADMIN_API_TOKEN`). `GET
 Missing configuration returns `503`; an absent or incorrect header returns
 `401`. Never commit the token or expose it in client-side JavaScript.
 
+### Full admin control panel
+
+The `/admin` route provides a protected control panel for settings, pages,
+products, categories, jobs, applications, messages, dealers, sales officers,
+and certifications. Configure `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and
+`ADMIN_SESSION_SECRET` as Cloudflare secrets before signing in. Also protect
+`/admin` and `/api/admin/*` with Cloudflare Access; the application session is
+the second protection layer.
+
+Set the application credentials interactively:
+
+```bash
+npx wrangler secret put ADMIN_USERNAME
+npx wrangler secret put ADMIN_PASSWORD
+npx wrangler secret put ADMIN_SESSION_SECRET
+```
+
+Use a long random value for `ADMIN_SESSION_SECRET`. In Cloudflare Zero Trust,
+create an Access application for the Worker hostname and restrict both
+`/admin` and `/api/admin/*` to your administrator email or identity group.
+
 ## Requirements
 
 - Node.js 20+

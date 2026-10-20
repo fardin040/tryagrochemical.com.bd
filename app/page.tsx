@@ -1,11 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { certifications, pages, products, settings } from "../lib/data";
+import { getPage, getSettings, listCertifications, listProducts } from "../lib/db";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+export default async function Home() {
+  const [settings, page, products, certifications] = await Promise.all([getSettings(), getPage("home"), listProducts(), listCertifications()]);
   return <><main>
     <section className="hero"><div className="hero-content"><p className="eyebrow">Trusted agrochemical partner in Bangladesh</p><h2>Supporting Farmers with Modern Crop Protection &amp; Nutrition</h2><p><strong>{settings.siteTitle}</strong> delivers reliable herbicides, insecticides, fungicides, and plant nutrition products to help farmers achieve higher yields.</p><div className="hero-actions"><Link className="btn btn-primary" href="/products">Explore Products</Link><Link className="btn btn-outline" href="/contact">Talk to Our Team</Link></div><div className="trust-badges"><span>✅ Quality assured batches</span><span>🌾 Field-tested performance</span><span>🧪 Expert agronomy guidance</span></div></div><div className="hero-card"><h3>We help you protect every stage of the crop cycle</h3><ul><li>Seed treatment &amp; early growth protection</li><li>Pest, weed, and disease control programs</li><li>Balanced nutrition and yield optimization</li><li>Post-harvest safety support</li></ul></div></section>
-    <section><div className="section-intro" dangerouslySetInnerHTML={{__html: pages.home.content}} /></section>
+    <section><div className="section-intro" dangerouslySetInnerHTML={{__html: page?.content ?? ""}} /></section>
     <section className="products-preview"><h2 style={{textAlign:"center",marginBottom:30}}>Latest Products</h2><div className="feature-grid">{products.map(p=><article className="product-card" key={p.id}><div className="product-image-wrapper">{p.image?<Image src={p.image} alt={p.name} width={400} height={200}/>:<span>No Image</span>}</div><div className="product-category">{p.category}</div><h3>{p.name}</h3><Link href={`/product/${p.id}`} className="btn btn-primary">View Details</Link></article>)}</div><div style={{textAlign:"center",marginTop:30}}><Link href="/products" className="btn btn-outline">View All Products</Link></div></section>
     <section className="stats-section"><div className="section-intro"><h2>Committed to Sustainable Agriculture</h2><p>We focus on safe usage, environmental responsibility, and proven performance.</p></div><div className="stats-grid"><div className="stat-card"><h3>20+ Years</h3><p>Experience</p></div><div className="stat-card"><h3>100+ Products</h3><p>Solutions</p></div><div className="stat-card"><h3>Nationwide</h3><p>Distribution</p></div><div className="stat-card"><h3>Quality First</h3><p>Verified</p></div></div></section>
     <section className="certifications-section"><div className="section-intro"><h2>Accreditations &amp; Quality Assurance</h2><p>Certified by leading agricultural bodies and committed to international quality standards.</p></div><div className="cert-grid">{certifications.map(c=><div className="cert-card" key={c.title}><div className="cert-icon">{c.icon}</div><h3>{c.title}</h3><p>{c.description}</p></div>)}</div></section>
