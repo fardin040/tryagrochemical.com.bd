@@ -40,10 +40,33 @@ export async function listCertifications(db?: D1Database): Promise<DbCertificati
 export async function listJobs(db?: D1Database): Promise<DbJob[]> {
   const database = db ?? await getDb();
   if (!database) return fallbackJobs;
-  return (await database.prepare("SELECT id,title,location,type,description,deadline FROM jobs WHERE deadline IS NULL OR deadline >= date('now') ORDER BY created_at DESC").all<DbJob>()).results;
+  try {
+    return (await database.prepare("SELECT id,title,location,type,description,deadline FROM jobs WHERE deadline IS NULL OR deadline >= date('now') ORDER BY created_at DESC").all<DbJob>()).results;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("no such table: jobs")) return fallbackJobs;
+    throw error;
+  }
 }
-export async function listDealers(db?: D1Database) { const database = db ?? await getDb(); return database ? (await database.prepare("SELECT * FROM dealers ORDER BY district,name").all()).results : []; }
-export async function listSalesOfficers(db?: D1Database) { const database = db ?? await getDb(); return database ? (await database.prepare("SELECT * FROM sales_officers ORDER BY name").all()).results : []; }
+export async function listDealers(db?: D1Database) {
+  const database = db ?? await getDb();
+  if (!database) return [];
+  try {
+    return (await database.prepare("SELECT * FROM dealers ORDER BY district,name").all()).results;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("no such table: dealers")) return [];
+    throw error;
+  }
+}
+export async function listSalesOfficers(db?: D1Database) {
+  const database = db ?? await getDb();
+  if (!database) return [];
+  try {
+    return (await database.prepare("SELECT * FROM sales_officers ORDER BY name").all()).results;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("no such table: sales_officers")) return [];
+    throw error;
+  }
+}
 export async function createMessage(input: {name:string; phone:string; message:string}, db?: D1Database) {
   const database = db ?? await getDb();
   if (!database) throw new Error("D1 binding DB is not configured");
