@@ -3,38 +3,41 @@
 import { useEffect, useMemo, useState } from "react";
 
 const sections = [
-  ["settings", "Site settings", ["setting_key", "setting_value"]],
-  ["pages", "Pages", ["slug", "title", "content", "meta_description"]],
-  ["products", "Products", ["name", "description", "category", "image"]],
-  ["categories", "Categories", ["name", "slug"]],
-  ["jobs", "Jobs", ["title", "location", "type", "description", "deadline"]],
-  ["job_applications", "Applications", ["job_id", "applicant_name", "email", "phone", "cover_letter", "resume", "status", "is_general"]],
-  ["messages", "Messages", ["name", "phone", "message"]],
-  ["dealers", "Dealers", ["name", "organization", "address", "district", "phone"]],
-  ["sales_officers", "Sales officers", ["name", "designation", "area", "phone", "image"]],
-  ["certifications", "Certifications", ["title", "description", "icon"]],
+  ["settings", "Site settings", ["setting_key", "setting_value"], "Configuration"],
+  ["pages", "Pages", ["slug", "title", "content", "meta_description"], "Content"],
+  ["products", "Products", ["name", "description", "category", "image"], "Catalog"],
+  ["categories", "Categories", ["name", "slug"], "Catalog"],
+  ["jobs", "Jobs", ["title", "location", "type", "description", "deadline"], "Careers"],
+  ["job_applications", "Applications", ["job_id", "applicant_name", "email", "phone", "cover_letter", "resume", "status", "is_general"], "Careers"],
+  ["messages", "Messages", ["name", "phone", "message"], "Communication"],
+  ["dealers", "Dealers", ["name", "organization", "address", "district", "phone"], "Network"],
+  ["sales_officers", "Sales officers", ["name", "designation", "area", "phone", "image"], "Network"],
+  ["certifications", "Certifications", ["title", "description", "icon"], "Content"],
 ] as const;
 type Section = typeof sections[number];
 type Row = Record<string, unknown> & { id?: number };
 
 export default function AdminPanel() {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
-  const [active, setActive] = useState<Section[0]>("products");
+  const [active, setActive] = useState<Section[0] | "dashboard">("dashboard");
   const [rows, setRows] = useState<Row[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const section = useMemo(() => sections.find((item) => item[0] === active) ?? sections[2], [active]);
   const filteredRows = rows.filter((row) => JSON.stringify(row).toLowerCase().includes(query.toLowerCase()));
 
   useEffect(() => { void fetch("/api/admin/auth").then((r) => r.json()).then((data: { authenticated: boolean }) => setAuthenticated(data.authenticated)); }, []);
-  useEffect(() => { if (authenticated) void load(active); }, [active, authenticated]);
+  useEffect(() => { if (authenticated && active !== "dashboard") void load(active); }, [active, authenticated]);
 
   async function load(table: string) {
+    setLoading(true);
     const response = await fetch(`/api/admin/data?table=${table}`);
     const data = response.ok ? await response.json() as Row[] : [];
     setRows(data);
     setCounts((old) => ({ ...old, [table]: data.length }));
+    setLoading(false);
   }
   async function login(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,9 +65,10 @@ export default function AdminPanel() {
     setMessage(response.ok ? `Uploaded: ${data.url}` : data.error ?? "Upload failed.");
   }
   if (authenticated === null) return <p>Checking admin access…</p>;
-  if (!authenticated) return <form className="contact-form" onSubmit={login}><h2>Site administration</h2><p>Sign in to manage the website.</p><label>Username</label><input name="username" required autoComplete="username" /><label>Password</label><input name="password" type="password" required autoComplete="current-password" /><button className="btn btn-primary">Sign in</button>{message && <p>{message}</p>}</form>;
-  return <div className="admin-layout">
-    <aside className="admin-sidebar"><h2>Control panel</h2><button className={active === "products" ? "active" : ""} onClick={() => setActive("products")}>Overview</button>{sections.map(([key, label]) => <button className={active === key ? "active" : ""} key={key} onClick={() => setActive(key)}>{label} {counts[key] !== undefined && <small>({counts[key]})</small>}</button>)}<label className="admin-upload">Upload image<input type="file" accept="image/*" onChange={upload} /></label><button onClick={async () => { await fetch("/api/admin/auth", { method: "DELETE" }); setAuthenticated(false); }}>Sign out</button></aside>
-    <div className="admin-content"><h2>{section[1]}</h2><div className="admin-toolbar"><input placeholder="Search records…" value={query} onChange={(event) => setQuery(event.target.value)} /><button onClick={() => load(active)}>Refresh</button></div><form className="contact-form admin-form" onSubmit={(event) => save(event)}>{section[2].map((field) => field === "content" || field === "description" || field === "message" || field === "cover_letter" ? <label key={field}>{field}<textarea name={field} rows={3} /> </label> : <label key={field}>{field}<input name={field} /></label>)}<button className="btn btn-primary">Add record</button></form>{message && <p>{message}</p>}<div className="admin-table">{filteredRows.map((row) => <article key={String(row.id)}><strong>#{row.id}</strong><form onSubmit={(event) => save(event, row.id)}>{section[2].map((field) => field === "content" || field === "description" || field === "message" || field === "cover_letter" ? <label key={field}>{field}<textarea name={field} rows={3} defaultValue={String(row[field] ?? "")} /></label> : <label key={field}>{field}<input name={field} defaultValue={String(row[field] ?? "")} /></label>)}<button className="btn btn-primary">Save changes</button><button type="button" onClick={() => remove(row.id!)}>Delete</button></form></article>)}</div></div>
+  if (!authenticated) return <div className="admin-login"><div className="admin-login-card"><div className="admin-brand-mark">TA</div><h2>Welcome back</h2><p>Sign in to manage your Try Agro Chemical website.</p><form className="contact-form" onSubmit={login}><label>Username<input name="username" required autoComplete="username" placeholder="Enter your username" /></label><label>Password<input name="password" type="password" required autoComplete="current-password" placeholder="Enter your password" /></label><button className="btn btn-primary">Sign in to dashboard</button>{message && <p className="admin-error">{message}</p>}</form></div></div>;
+  const groups = [...new Set(sections.map((item) => item[3]))];
+  return <div className="admin-shell">
+    <aside className="admin-sidebar"><div className="admin-sidebar-brand"><div className="admin-brand-mark">TA</div><div><strong>Try Agro Chemical</strong><small>Site control panel</small></div></div><button className={`admin-nav-overview ${active === "dashboard" ? "active" : ""}`} onClick={() => setActive("dashboard")}>Dashboard</button>{groups.map((group) => <div className="admin-nav-group" key={group}><small>{group}</small>{sections.filter((item) => item[3] === group).map(([key, label]) => <button className={active === key ? "active" : ""} key={key} onClick={() => setActive(key)}><span>{label}</span>{counts[key] !== undefined && <small>{counts[key]}</small>}</button>)}</div>)}<label className="admin-upload">Upload image<input type="file" accept="image/*" onChange={upload} /></label><button className="admin-signout" onClick={async () => { await fetch("/api/admin/auth", { method: "DELETE" }); setAuthenticated(false); }}>Sign out</button></aside>
+    <div className="admin-main"><header className="admin-topbar"><div><p className="admin-eyebrow">Administration</p><h1>{active === "dashboard" ? "Dashboard" : section[1]}</h1></div><a className="admin-view-site" href="/" target="_blank" rel="noreferrer">View website ↗</a></header>{active === "dashboard" ? <div className="admin-dashboard"><p className="admin-intro">Manage your website content, catalog, careers, and customer communication from one place.</p><div className="admin-stat-grid">{sections.slice(0, 6).map(([key, label]) => <button className="admin-stat-card" key={key} onClick={() => setActive(key)}><span>{label}</span><strong>{counts[key] ?? "—"}</strong><small>Manage {label.toLowerCase()} →</small></button>)}</div><div className="admin-quick-actions"><h2>Quick actions</h2><button className="btn btn-primary" onClick={() => setActive("products")}>Add product</button><button className="btn btn-outline" onClick={() => setActive("pages")}>Edit website content</button><button className="btn btn-outline" onClick={() => setActive("jobs")}>Post a job</button></div></div> : <div className="admin-content"><div className="admin-section-heading"><div><p>{section[3]} management</p><h2>{section[1]}</h2></div><button onClick={() => load(active)}>↻ Refresh</button></div><div className="admin-toolbar"><input aria-label="Search records" placeholder={`Search ${section[1].toLowerCase()}…`} value={query} onChange={(event) => setQuery(event.target.value)} /><span>{filteredRows.length} of {rows.length} records</span></div><form className="contact-form admin-form" onSubmit={(event) => save(event)}><h3>Add new {section[1].toLowerCase().replace(/s$/, "")}</h3>{section[2].map((field) => field === "content" || field === "description" || field === "message" || field === "cover_letter" ? <label key={field}>{field.replaceAll("_", " ")}<textarea name={field} rows={3} /> </label> : <label key={field}>{field.replaceAll("_", " ")}<input name={field} /></label>)}<button className="btn btn-primary">Add record</button></form>{message && <p className="admin-status">{message}</p>}{loading ? <p className="admin-empty">Loading records…</p> : <div className="admin-table">{filteredRows.map((row) => <article key={String(row.id)}><div className="admin-record-header"><strong>Record #{row.id}</strong><span>{String(row.updated_at ?? row.created_at ?? "")}</span></div><form onSubmit={(event) => save(event, row.id)}>{section[2].map((field) => field === "content" || field === "description" || field === "message" || field === "cover_letter" ? <label key={field}>{field.replaceAll("_", " ")}<textarea name={field} rows={3} defaultValue={String(row[field] ?? "")} /></label> : <label key={field}>{field.replaceAll("_", " ")}<input name={field} defaultValue={String(row[field] ?? "")} /></label>)}<div className="admin-record-actions"><button className="btn btn-primary">Save changes</button><button type="button" className="admin-danger" onClick={() => remove(row.id!)}>Delete</button></div></form></article>)}</div>}{!loading && !filteredRows.length && <div className="admin-empty"><strong>No records found</strong><p>Add your first record above or clear the search filter.</p></div>}</div>}</div>
   </div>;
 }
