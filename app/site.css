@@ -75,8 +75,8 @@ ul {
 }
 
 .logo-box img {
-    height: 60px;
-    width: auto;
+    width: 220px;
+    height: auto;
 }
 
 .logo-box h1 {
@@ -95,6 +95,10 @@ ul {
     font-weight: 500;
     margin-top: 2px;
     letter-spacing: 0.5px;
+}
+
+.logo-box > div {
+    align-self: center;
 }
 
 
@@ -439,6 +443,12 @@ p {
     border-bottom: 1px solid var(--border);
 }
 
+.admin-sidebar-logo {
+    width: 86px;
+    height: auto;
+    flex-shrink: 0;
+}
+
 .admin-sidebar-brand strong,
 .admin-sidebar-brand small {
     display: block;
@@ -649,6 +659,12 @@ p {
 
 .admin-login-card .admin-brand-mark {
     margin: 0 auto 14px;
+}
+
+.admin-logo {
+    width: min(100%, 220px);
+    height: auto;
+    margin: 0 auto 18px;
 }
 
 .admin-login-card .contact-form {
@@ -1675,8 +1691,8 @@ section h2 {
 
     .logo-box img {
         margin-bottom: 0;
-        height: 50px;
-        /* Slightly smaller on mobile */
+        width: 180px;
+        height: auto;
     }
 
     .logo-box h1 {
