@@ -444,7 +444,7 @@ p {
 }
 
 .admin-sidebar-logo {
-    width: 110px;
+    width: 82px;
     height: auto;
     flex-shrink: 0;
 }
@@ -662,9 +662,9 @@ p {
 }
 
 .admin-logo {
-    width: min(100%, 220px);
+    width: min(100%, 170px);
     height: auto;
-    margin: 0 auto 18px;
+    margin: 0 auto 14px;
 }
 
 .admin-login-card .contact-form {
